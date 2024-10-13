@@ -115,7 +115,41 @@ We will be needing both netcdf-c and netcdf-fortran for our build. The latest ve
 Since we want support for netCDF-4 and parallel I/O operations, we need to download and build HDF5, zlib and curl. So, before proceeding with netCDF, let's do that.
 
 #### ZLIB
-TBA
+The library can be downloaded [here](https://www.zlib.net/) and the latest version at the time of writing is 1.3.1.
+1. Create some folders:
+```bash
+mkdir -p ~/software/zlib
+cd ~/software/zlib
+```
+2. Then, download the source code:
+```bash
+wget https://www.zlib.net/zlib-1.3.1.tar.gz
+```
+3. Decompress the tarball:
+```bash
+tar xfz zlib-1.3.1.tar.gz
+```
+4. ...and create a build directory:
+```
+mkdir zlib_build
+cd zlib_build
+```
+5. Run the following to configure the package (ready for build) and define the installation folder:
+```bash
+ZDIR=/home/<user>/build_WRF/libraries/zlib-install
+../zlib-1.3.1/configure --prefix=${ZDIR}
+```
+6. Ready to build and install ZLIB, so go ahead and run:
+```bash
+make install
+```
+
+If the installation directory for ZLIB is needed in other sessions, include it in the user's configuration file:
+```bash
+echo >> ~/.bashrc
+echo "#Add ZLIB to PATH" >> ~/.bashrc
+echo PATH="$PATH:${ZDIR}" >> ~/.bashrc
+```
 
 #### HDF5
 TBA
