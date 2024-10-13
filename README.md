@@ -23,4 +23,60 @@ At a later stage, once we get familiar with the process, we will try using Intel
 
 In addition to the [WRF code](https://github.com/wrf-model/WRF), we will be needing the code for the WRF Pre-Processing System (WPS) from the official [Github page](https://github.com/wrf-model/WPS).
 
+## Build Steps
+1. Let's start by updating our system:
+```bash
+sudo apt update && sudo apt dist-upgrade -y
+```
+2. Proceed with installing the base system for building:
+```bash
+sudo apt install build-essentials csh m4 cmake gcc gfortran libjpeg-dev
+```
+3. To keep things tidy, let's create a folder to build the required libraries:
+```bash
+mkdir -p ~/build_WRF/libraries
+```
+4. Time to build MPICH. There is an excellent [guide](https://www.southampton.ac.uk/~sjc/raspberrypi/pi_supercomputer_southampton.htm) from Prof Simon Cox.
+In summary, we need to perform the following steps:
+   a. Firstly, create some folders:
+   ```bash
+   mkdir -p ~/software/mpich3
+   cd ~/software/mpich3
+   ```
+   b. Then, download the source code from [here](https://www.mpich.org/downloads/):
+   ```bash
+   wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
+   ```
+   c. Decompress the tarball:
+   ```bash
+   tar xfz mpich-4.2.3.tar.gz
+   ```
+   d. ...and create a build directory:
+   ```
+   mkdir mpich_build
+   cd mpich_build
+   ```
+   e. Run the following to configure the package (ready for build) and define the installation folder:
+   ```bash
+   ../mpich-4.2.3/configure --prefix=/home/<user>/build_WRF/libraries/mpich3-install
+   ```
+   f. Ready to build MPICH, so go ahead and run:
+   ```bash
+   make
+   ```
+   Be prepared to wait for a few hours...
+   g. Finally, install the package:
+   ```bash
+   make install
+   ```
+6. At this point MPCIH should be installed, so let's add it to our $PATH:
+```bash
+export PATH=$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin
+```
+7. To make this available to future sessions, let's add this to the user's configuration file:
+```bash
+echo >> ~/.bashrc
+echo #Add MPI to PATH >> ~/.bashrc
+echo PATH="$PATH:/home/pi/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
+```
 
