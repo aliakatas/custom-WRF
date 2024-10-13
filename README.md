@@ -16,7 +16,7 @@ The libraries are the following:
 3. [m4](https://www.gnu.org/software/m4/m4.html) a general-purpose macro processor that can be used to preprocess C and assembly language programs.
 4. [zlib](https://zlib.net/) a (de-)compression library.
 5. [libpng](http://www.libpng.org/pub/png/) a library to support the Portable Network Graphics format.
-6. [jasper] collection of libraries and apps to code and manipulate various image formats.
+6. [jasper](https://github.com/jasper-software/jasper) collection of libraries and apps to code and manipulate various image formats.
 
 As a first attempt, we will try building the system using GNU Fortran and C compilers.
 At a later stage, once we get familiar with the process, we will try using Intel's oneAPI compilers.
