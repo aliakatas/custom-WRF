@@ -76,7 +76,7 @@ export PATH=$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin
 7. To make this available to future sessions, let's add this to the user's configuration file:
 ```bash
 echo >> ~/.bashrc
-echo #Add MPI to PATH >> ~/.bashrc
-echo PATH="$PATH:/home/pi/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
+echo "#Add MPI to PATH" >> ~/.bashrc
+echo PATH="$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
 ```
 
