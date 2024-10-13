@@ -115,12 +115,15 @@ We will be needing both netcdf-c and netcdf-fortran for our build. The latest ve
 Since we want support for netCDF-4 and parallel I/O operations, we need to download and build HDF5, zlib and curl. So, before proceeding with netCDF, let's do that.
 
 #### ZLIB
+TBA
 
 #### HDF5
+TBA
 
 #### CURL
+TBA
 
-
+---------
 
 Having all of the above in order, we can start the build process for netCDF.
 
