@@ -36,47 +36,117 @@ sudo apt install build-essentials csh m4 cmake gcc gfortran libjpeg-dev
 ```bash
 mkdir -p ~/build_WRF/libraries
 ```
-4. Time to build MPICH. There is an excellent [guide](https://www.southampton.ac.uk/~sjc/raspberrypi/pi_supercomputer_southampton.htm) from Prof Simon Cox.
-In summary, we need to perform the following steps:
-   a. Firstly, create some folders:
-   ```bash
-   mkdir -p ~/software/mpich3
-   cd ~/software/mpich3
-   ```
-   b. Then, download the source code from [here](https://www.mpich.org/downloads/):
-   ```bash
-   wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
-   ```
-   c. Decompress the tarball:
-   ```bash
-   tar xfz mpich-4.2.3.tar.gz
-   ```
-   d. ...and create a build directory:
-   ```
-   mkdir mpich_build
-   cd mpich_build
-   ```
-   e. Run the following to configure the package (ready for build) and define the installation folder:
-   ```bash
-   ../mpich-4.2.3/configure --prefix=/home/<user>/build_WRF/libraries/mpich3-install
-   ```
-   f. Ready to build MPICH, so go ahead and run:
-   ```bash
-   make
-   ```
-   Be prepared to wait for a few hours...
-   g. Finally, install the package:
-   ```bash
-   make install
-   ```
-6. At this point MPCIH should be installed, so let's add it to our $PATH:
+
+### MPICH
+Time to build MPICH. There is an excellent [guide](https://www.southampton.ac.uk/~sjc/raspberrypi/pi_supercomputer_southampton.htm) from Prof Simon Cox, but it has a wider scope.
+In summary, we need to perform the following steps using the latest version at this time (mpich 4.2.3):
+1. Firstly, create some folders:
+```bash
+mkdir -p ~/software/mpich3
+cd ~/software/mpich3
+```
+2. Then, download the source code from [here](https://www.mpich.org/downloads/):
+```bash
+wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
+```
+3. Decompress the tarball:
+```bash
+tar xfz mpich-4.2.3.tar.gz
+```
+4. ...and create a build directory:
+```
+mkdir mpich_build
+cd mpich_build
+```
+5. Run the following to configure the package (ready for build) and define the installation folder:
+```bash
+../mpich-4.2.3/configure --prefix=/home/<user>/build_WRF/libraries/mpich3-install
+```
+6. Ready to build MPICH, so go ahead and run:
+```bash
+make
+```
+Be prepared to wait for a few hours...
+7. Finally, install the package:
+```bash
+make install
+```
+8. At this point MPCIH should be installed, so let's add it to our $PATH:
 ```bash
 export PATH=$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin
 ```
-7. To make this available to future sessions, let's add this to the user's configuration file:
+9. To make this available to future sessions, let's add this to the user's configuration file:
 ```bash
 echo >> ~/.bashrc
 echo "#Add MPI to PATH" >> ~/.bashrc
 echo PATH="$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
 ```
+10. To make sure that the library has been installed correctly, run the following:
+```bash
+which mpicc
+which mpiexec
+```
+11. Create a directory and move into it to run some tests for MPICH:
+```bash
+mkdir -p ~/software/mpich3/mpi_testing
+cd ~/software/mpich3/mpi_testing
+```
+12. Now run the single-node test with the following:
+```bash
+mpiexec -hosts 127.0.0.1 -n 1 hostname
+```
+This should return "raspberrypi" or the hostname of your device.
+13. Now run another test using one of the examples provided in C (calculate pi):
+```bash
+mpiexec -hosts 127.0.0.1 -n 2 ~/software/mpich3/mpich_build/examples/cpi
+```
+The return message should look like this:
+```
+Process 0 of 2 is on raspberrypi
+Process 1 of 2 is on raspberrypi
+pi is approximately 3.1415926544231318, Error is 0.0000000008333387
+wall clock time = 0.000214
+```
+
+### NetCDF
+NetCDF can be downloaded from [unidata](https://downloads.unidata.ucar.edu/netcdf/) and there is some useful documentation [here](https://docs.unidata.ucar.edu/nug/current/getting_and_building_netcdf.html). 
+We will be needing both netcdf-c and netcdf-fortran for our build. The latest versions at this time are netcdf-c 4.9.2 and netcdf-fortran 4.6.1.
+
+Since we want support for netCDF-4 and parallel I/O operations, we need to download and build HDF5, zlib and curl. So, before proceeding with netCDF, let's do that.
+
+#### ZLIB
+
+#### HDF5
+
+#### CURL
+
+
+
+Having all of the above in order, we can start the build process for netCDF.
+
+1. Let's start by creating some folders for tidiness:
+```bash
+mkdir -p ~/software/netcdf
+cd ~/software/netcdf
+```
+2. Proceed with downloading the source code archive:
+```bash
+wget https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz
+wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
+```
+3. Decompresss the tarballs:
+```bash
+tar xzf netcdf-c-4.9.2.tar.gz
+tar xzf netcdf-fortran-4.6.1.tar.gz
+```
+4. ... and move to the netcdf-c directory first:
+```bash
+cd netcdf-c-4.9.2
+```
+5. Create the build directories needed:
+```bash
+mkdir netcdf-c-build
+mkdir netcdf-f-build
+```
+
 
