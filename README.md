@@ -302,6 +302,40 @@ make check
 make install
 ```
 
+### LIBPNG
+Moving on to libpng. 
+
+1. Create a folder and enter:
+```bash
+mkdir ~/libpng && cd ~/libpng
+```
+2. Download the source code [here](http://www.libpng.org/pub/png/libpng.html). Latest version at the time of writing: 1.6.44.
+```bash
+wget https://download.sourceforge.net/libpng/libpng-1.6.44.tar.gz
+```
+3. Extract the files from the archive:
+```bash
+tar xzf libpng-1.6.44.tar.gz
+```
+4. Enter the folder and create a build folder:
+```bash
+cd libpng-1.6.44
+mkdir libpng_build && libpng_build
+```
+5. Configure the build system and use the grib2 folder as the installation folder:
+```bash
+../configure --prefix=/home/<user>/build_WRF/libraries/grib2-install
+```
+6. Ready to build and install, so go ahead and run:
+```bash
+make
+make install
+```
+
+### JASPER
+Finally, we need to build and install jasper.
+
+
 
 
 
