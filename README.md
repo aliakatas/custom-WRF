@@ -390,7 +390,10 @@ export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 # Copy landread.c.dist to landread.c in share directory to bypass compile error.
 #  
 # *****************************************************************************
+```
 
-
+Could it all this be in vain?
+It looks like the instructions here: https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compilation_tutorial.php are similar but somehow clearer?
+Will attempt later!
 
 
