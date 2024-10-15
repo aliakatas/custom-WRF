@@ -334,7 +334,62 @@ make install
 
 ### JASPER
 Finally, we need to build and install jasper.
+```bash
+cd ~/software
+git clone git@github.com:jasper-software/jasper.git
+cd jasper
+mkdir jasper_build && cd jasper_build
+cmake .. -DJAS_ENABLE_SHARED=true -DCMAKE_INSTALL_PREFIX=/home/<user>/build_WRF/libraries/grib2-install -DALLOW_IN_SOURCE_BUILD=on
+cmake --build .
+make clean all
+make test
+make install
+export JASPERINC=/home/<user>/build_WRF/libraries/grib2-install/include
+export JASPERLIB=/home/<user>/build_WRF/libraries/grib2-install/lib
+```
+---------
 
+Now we **_should_** be ready to build WRF!
+
+```bash
+cd ~/build_WRF
+git clone git@github.com:wrf-model/WRF.git
+cd WRF
+export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+./configure
+# messages about not finding HDF5 nor JASPER
+# selected option 3. dmpar + gfortran
+# selected basic nesting (1.)
+# Other messages:
+# ------------------------------------------------------------------------
+# Settings listed above are written to configure.wrf.
+# If you wish to change settings, please edit that file.
+# If you wish to change the default options, edit the file:
+#      arch/configure.defaults
+# NetCDF users note:
+#  This installation of NetCDF supports large file support.  To DISABLE large file
+#  support in NetCDF, set the environment variable WRFIO_NCD_NO_LARGE_FILE_SUPPORT
+#  to 1 and run configure again. Set to any other value to avoid this message.
+#   
+# 
+# Testing for NetCDF, C and Fortran compiler
+# 
+# This installation of NetCDF is 64-bit
+#                  C compiler is 64-bit
+#            Fortran compiler is 64-bit
+#               It will build in 64-bit
+#  
+# NetCDF version: 4.9.2
+# Enabled NetCDF-4/HDF-5: yes
+# NetCDF built with PnetCDF: no
+#  
+# 
+# ************************** W A R N I N G ************************************
+#  
+# The moving nest option is not available due to missing rpc/types.h file.
+# Copy landread.c.dist to landread.c in share directory to bypass compile error.
+#  
+# *****************************************************************************
 
 
 
