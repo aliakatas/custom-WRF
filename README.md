@@ -177,7 +177,7 @@ cd hdf5_build
 H5IR=/home/<user>/build_WRF/libraries/hdf5-install
 ../hdf5-1-14-5/configure --with-zlib=${ZDIR} --prefix=${H5DIR} --enable-hl
 ```
-6. Ready to build and install ZLIB, so go ahead and run:
+6. Ready to build and install HDF5, so go ahead and run:
 ```bash
 make check
 make install
