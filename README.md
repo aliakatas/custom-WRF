@@ -152,7 +152,35 @@ echo PATH="$PATH:${ZDIR}" >> ~/.bashrc
 ```
 
 #### HDF5
-TBA
+The library can be downloaded [here](https://www.hdfgroup.org/download-hdf5/source-code/) and the latest version at the time of writing is 1.14.5. Mind that it might require a user account (free to register).
+1. Create some folders:
+```bash
+mkdir -p ~/software/hdf5
+cd ~/software/hdf5
+```
+2. Then, download the source code:
+```bash
+wget https://www.hdfgroup.org/download/hdf5-1-14-5-tar-gz
+```
+3. Decompress the tarball:
+```bash
+tar xfz hdf5-1-14-5.tar.gz
+```
+4. ...and create a build directory:
+```
+mkdir hdf5_build
+cd hdf5_build
+```
+5. Run the following to configure the package (ready for build) and define the installation folder:
+```bash
+H5IR=/home/<user>/build_WRF/libraries/hdf5-install
+../hdf5-1-14-5/configure --with-zlib=${ZDIR} --prefix=${H5DIR} --enable-hl
+```
+6. Ready to build and install ZLIB, so go ahead and run:
+```bash
+make check
+make install
+```
 
 #### CURL
 TBA
