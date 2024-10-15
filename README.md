@@ -285,3 +285,23 @@ echo >> ~/.bashrc
 echo "#Add NETCDF to PATH" >> ~/.bashrc
 echo PATH="${NETCDF}:$PATH" >> ~/.bashrc
 ```
+------------
+#### netCDF-Fortran
+Now we are ready to build netCDF-Fortran. 
+1. Move to the relevant directory:
+```bash
+cd ../netcdf-f-build
+```
+2. Configure the build system:
+```bash
+CPPFLAGS="-I${NCDIR}/include" LDFLAGS="-L${NCDIR}/lib" ../configure --prefix=${NCDIR}
+```
+3. Ready to build and install netCDF-Fortran, so go ahead and run:
+```bash
+make check
+make install
+```
+
+
+
+
