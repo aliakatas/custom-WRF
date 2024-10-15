@@ -208,9 +208,15 @@ cd curl_build
 CURLDIR=/home/<user>/build_WRF/libraries/curl-install
 ../curl-8.10.1/configure --prefix=${CURLDIR} --with-openssl
 ```
-6. Ready to build and install ZLIB, so go ahead and run:
+6. There might be some errors related to not finding the openssl library. If not, skip to the next step.
+To rectify this, install the dev packages:
 ```bash
-make check
+sudo apt install libssl-dev libpsl-dev
+```
+and re-run step 5.
+7. Ready to build and install CURL, so go ahead and run:
+```bash
+make   
 make install
 ```
 
