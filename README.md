@@ -162,6 +162,7 @@ cd ~/software/hdf5
 ```bash
 wget https://www.hdfgroup.org/download/hdf5-1-14-5-tar-gz
 ```
+Be advised, that it might not work. You might have to rely on downloading and trasferring the file via other means!
 3. Decompress the tarball:
 ```bash
 tar xfz hdf5-1-14-5.tar.gz
