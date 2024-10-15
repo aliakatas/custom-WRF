@@ -249,5 +249,39 @@ cd netcdf-c-4.9.2
 mkdir netcdf-c-build
 mkdir netcdf-f-build
 ```
+6. Enter the "c-build" directory:
+```bash
+cd netcdf-c-build
+```
+7. Configure the build system. Disabling xml2 will force using the netCDF internal version of the library.
+```bash
+NCDIR=/home/<user>/build_WRF/libraries/netcdf-install
+CPPFLAGS="-I${H5DIR}/include -I${ZDIR}/include -I${CURLDIR}/include" LDFLAGS="-L${H5DIR}/lib -L${ZDIR}/lib -L${CURLDIR}/lib" ../configure --prefix=${NCDIR} --disable-libxml2
+```
+8. Ready to build and install netCDF-C, so go ahead and run:
+```bash
+make check
+make install
+```
 
+On exit, it gives a very useful message about how to use netcdf with your projects:
+```bash
+...
+| You can use script "nc-config" to find out the relevant     |
+| compiler options to build your application. Enter           |
+|                                                             |
+|     nc-config --help                                        |
+|                                                             |
+| for additional information.
+...
+```
 
+Another usefule step is to export some environment variables for later or for the future:
+```bash
+export PATH=/home/<user>/build_WRF/libraries/netcdf-install/bin:$PATH
+export NETCDF=/home/<user>/build_WRF/libraries/netcdf-install
+
+echo >> ~/.bashrc
+echo "#Add NETCDF to PATH" >> ~/.bashrc
+echo PATH="${NETCDF}:$PATH" >> ~/.bashrc
+```
