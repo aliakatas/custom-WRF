@@ -184,7 +184,35 @@ make install
 ```
 
 #### CURL
-TBA
+The library can be downloaded [here](https://curl.se/download.html) and the latest version at the time of writing is 8.10.1.
+1. Create some folders:
+```bash
+mkdir -p ~/software/curl
+cd ~/software/curl
+```
+2. Then, download the source code:
+```bash
+wget https://curl.se/download/curl-8.10.1.tar.gz
+```
+3. Decompress the tarball:
+```bash
+tar xfz curl-8.10.1.tar.gz
+```
+4. ...and create a build directory:
+```
+mkdir curl_build
+cd curl_build
+```
+5. Run the following to configure the package (ready for build) and define the installation folder:
+```bash
+CURLDIR=/home/<user>/build_WRF/libraries/curl-install
+../curl-8.10.1/configure --prefix=${CURLDIR} --with-openssl
+```
+6. Ready to build and install ZLIB, so go ahead and run:
+```bash
+make check
+make install
+```
 
 ---------
 
