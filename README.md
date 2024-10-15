@@ -214,6 +214,7 @@ To rectify this, install the dev packages:
 sudo apt install libssl-dev libpsl-dev
 ```
 and re-run step 5.
+
 7. Ready to build and install CURL, so go ahead and run:
 ```bash
 make   
