@@ -17,6 +17,10 @@ ZLIB_ROOT=${WRF_DEPS_BUILD_DIR}/zlib
 ZLIB_INSTALL_DIR=${WRF_LIBS}/zlib
 ZLIB_BIN=${ZLIB_INSTALL_DIR}/bin
 
+H5_ROOT=${WRF_DEPS_BUILD_DIR}/hdf5
+H5_INSTALL_DIR=${WRF_LIBS}/hdf5
+H5_BIN=${ZLIB_INSTALL_DIR}/bin
+
 # ********************************************
 echo "WRF Root is: " ${WRF_ROOT}
 echo "WRF libraries are located in: " ${WRF_LIBS}
@@ -80,18 +84,31 @@ echo "which mpicc says: " `which mpiexec`
 # mpiexec -hosts 127.0.0.1 -n 1 hostname
 mpiexec -hosts 127.0.0.1 -n 2 ${MPICH_ROOT}/mpich_build/examples/cpi
 
-# Prepping for netCDF - with ZLIB
-cd ${WRF_DEPS_BUILD_DIR}
+# # Prepping for netCDF - with ZLIB
+# cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${ZLIB_ROOT}
-cd ${ZLIB_ROOT}
-wget https://www.zlib.net/zlib-1.3.1.tar.gz
-tar xfz zlib-1.3.1.tar.gz
-mkdir zlib_build && cd zlib_build
-../zlib-1.3.1/configure --prefix=${ZLIB_INSTALL_DIR}
-make install
+# create_directory ${ZLIB_ROOT}
+# cd ${ZLIB_ROOT}
+# wget https://www.zlib.net/zlib-1.3.1.tar.gz
+# tar xfz zlib-1.3.1.tar.gz
+# mkdir zlib_build && cd zlib_build
+# ../zlib-1.3.1/configure --prefix=${ZLIB_INSTALL_DIR}
+# make install
 
 # Add ZLIB to the PATH
 PATH=${ZLIB_BIN}:${PATH}
 
+# Prepping for netCDF - moving on to HDF5
+cd ${WRF_DEPS_BUILD_DIR}
 
+create_directory ${H5_ROOT}
+cd ${H5_ROOT}
+wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
+tar xfz hdf5_1.14.5.tar.gz
+mkdir hdf5_build && cd hdf5_build
+../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl
+make check
+make install
+
+# Add HDF5 to the PATH
+PATH=${H5_BIN}:${PATH}
