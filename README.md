@@ -36,12 +36,16 @@ command > log_file 2>&1 &
 
 2. Proceed with installing the base system for building:
    ```bash
-   sudo apt install build-essentials csh m4 cmake gcc gfortran libjpeg-dev
+   sudo apt install build-essential csh m4 cmake gcc gfortran libjpeg-dev
    ```
 
-3. To keep things tidy, let's create a folder to build the required libraries:
+3. To keep things tidy, let's create a folder to store/install the required libraries:
    ```bash
-   mkdir -p ~/build_WRF/libraries
+   mkdir -p ~/build_wrf/libraries
+   ```
+   and one to build them in:
+   ```bash
+   mkdir -p ~/wrf_deps_builds
    ```
 
 ### MPICH
@@ -49,8 +53,7 @@ Time to build MPICH. There is an excellent [guide](https://www.southampton.ac.uk
 In summary, we need to perform the following steps using the latest version at this time (mpich 4.2.3):
 1. Firstly, create some folders:
    ```bash
-   mkdir -p ~/software/mpich3
-   cd ~/software/mpich3
+   mkdir -p ~/wrf_deps_builds/mpich3 && cd ~/wrf_deps_builds/mpich3
    ```
 
 2. Then, download the source code from [here](https://www.mpich.org/downloads/):
@@ -65,13 +68,12 @@ In summary, we need to perform the following steps using the latest version at t
 
 4. ...and create a build directory:
    ```
-   mkdir mpich_build
-   cd mpich_build
+   mkdir mpich_build && cd mpich_build
    ```
 
 5. Run the following to configure the package (ready for build) and define the installation folder:
    ```bash
-   ../mpich-4.2.3/configure --prefix=/home/<user>/build_WRF/libraries/mpich3-install
+   ../mpich-4.2.3/configure --prefix=~/build_wrf/libraries/mpich3
    ```
 
 6. Ready to build MPICH, so go ahead and run:
@@ -87,14 +89,14 @@ In summary, we need to perform the following steps using the latest version at t
 
 8. At this point MPCIH should be installed, so let's add it to our $PATH:
    ```bash
-   export PATH=$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin
+   export PATH=~/build_wrf/libraries/mpich3/bin:$PATH
    ```
 
 9. To make this available to future sessions, let's add this to the user's configuration file:
    ```bash
    echo >> ~/.bashrc
    echo "#Add MPI to PATH" >> ~/.bashrc
-   echo PATH="$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
+   echo PATH="$PATH:~/build_wrf/libraries/mpich3/bin" >> ~/.bashrc
    ```
 
 10. To make sure that the library has been installed correctly, run the following:
@@ -105,8 +107,7 @@ In summary, we need to perform the following steps using the latest version at t
 
 11. Create a directory and move into it to run some tests for MPICH:
    ```bash
-   mkdir -p ~/software/mpich3/mpi_testing
-   cd ~/software/mpich3/mpi_testing
+   mkdir -p ~/wrf_deps_builds/mpich3/mpi_testing && cd ~/wrf_deps_builds/mpich3/mpi_testing
    ```
 
 12. Now run the single-node test with the following:
@@ -117,7 +118,7 @@ In summary, we need to perform the following steps using the latest version at t
 
 13. Now run another test using one of the examples provided in C (calculate pi):
    ```bash
-   mpiexec -hosts 127.0.0.1 -n 2 ~/software/mpich3/mpich_build/examples/cpi
+   mpiexec -hosts 127.0.0.1 -n 2 ~/wrf_deps_builds/mpich3/mpich_build/examples/cpi
    ```
    The return message should look like this:
    ```bash
@@ -136,71 +137,84 @@ Since we want support for netCDF-4 and parallel I/O operations, we need to downl
 #### ZLIB
 The library can be downloaded [here](https://www.zlib.net/) and the latest version at the time of writing is 1.3.1.
 1. Create some folders:
-```bash
-mkdir -p ~/software/zlib
-cd ~/software/zlib
-```
-2. Then, download the source code:
-```bash
-wget https://www.zlib.net/zlib-1.3.1.tar.gz
-```
-3. Decompress the tarball:
-```bash
-tar xfz zlib-1.3.1.tar.gz
-```
-4. ...and create a build directory:
-```
-mkdir zlib_build
-cd zlib_build
-```
-5. Run the following to configure the package (ready for build) and define the installation folder:
-```bash
-ZDIR=/home/<user>/build_WRF/libraries/zlib-install
-../zlib-1.3.1/configure --prefix=${ZDIR}
-```
-6. Ready to build and install ZLIB, so go ahead and run:
-```bash
-make install
-```
+   ```bash
+   mkdir -p ~/wrf_deps_builds/zlib && cd ~/wrf_deps_builds/zlib
+   ```
 
-If the installation directory for ZLIB is needed in other sessions, include it in the user's configuration file:
-```bash
-echo >> ~/.bashrc
-echo "#Add ZLIB to PATH" >> ~/.bashrc
-echo PATH="$PATH:${ZDIR}" >> ~/.bashrc
-```
+2. Then, download the source code:
+   ```bash
+   wget https://www.zlib.net/zlib-1.3.1.tar.gz
+   ```
+
+3. Decompress the tarball:
+   ```bash
+   tar xfz zlib-1.3.1.tar.gz
+   ```
+
+4. ...and create a build directory:
+   ```
+   mkdir zlib_build && cd zlib_build
+   ```
+
+5. Run the following to configure the package (ready for build) and define the installation folder:
+   ```bash
+   ../zlib-1.3.1/configure --prefix=~/build_wrf/libraries/zlib
+   ```
+
+6. Ready to build and install ZLIB, so go ahead and run:
+   ```bash
+   make install
+   ```
+   If the installation directory for ZLIB is needed in other sessions, include it in the user's configuration file:
+   ```bash
+   echo >> ~/.bashrc
+   echo "#Add ZLIB to PATH" >> ~/.bashrc
+   echo PATH="~/build_wrf/libraries/zlib/bin:$PATH" >> ~/.bashrc
+   ```
 
 #### HDF5
-The library can be downloaded [here](https://www.hdfgroup.org/download-hdf5/source-code/) and the latest version at the time of writing is 1.14.5. Mind that it might require a user account (free to register).
+The library can be downloaded [here](https://www.hdfgroup.org/download-hdf5/source-code/) and the latest version at the time of writing is 1.14.5. Mind that it might require a user account (free to register). 
+Alternatively, head to [HDF5-Github](https://github.com/HDFGroup/hdf5) and clone away!
 1. Create some folders:
-```bash
-mkdir -p ~/software/hdf5
-cd ~/software/hdf5
-```
+   ```bash
+   mkdir -p ~/wrf_deps_builds/hdf5 && cd ~/wrf_deps_builds/hdf5
+   ```
+
 2. Then, download the source code:
-```bash
-wget https://www.hdfgroup.org/download/hdf5-1-14-5-tar-gz
-```
-Be advised, that it might not work. You might have to rely on downloading and trasferring the file via other means!
+   ```bash
+   wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
+   ```
+
 3. Decompress the tarball:
-```bash
-tar xfz hdf5-1-14-5.tar.gz
-```
+   ```bash
+   tar xfz hdf5_1.14.5.tar.gz
+   ```
+
 4. ...and create a build directory:
-```
-mkdir hdf5_build
-cd hdf5_build
-```
+   ```
+   mkdir hdf5_build && cd hdf5_build
+   ```
+
 5. Run the following to configure the package (ready for build) and define the installation folder:
-```bash
-H5IR=/home/<user>/build_WRF/libraries/hdf5-install
-../hdf5-1-14-5/configure --with-zlib=${ZDIR} --prefix=${H5DIR} --enable-hl
-```
+   ```bash
+   ../hdf5-hdf5_1.14.5/configure --with-zlib=~/build_wrf/libraries/zlib --prefix=~/build_wrf/libraries/hdf5 --enable-hl
+   ```
+
 6. Ready to build and install HDF5, so go ahead and run:
-```bash
-make check
-make install
-```
+   ```bash
+   make check
+   make install
+   ```
+7. Add HDF5 to the PATH:
+   ```bash
+   PATH=~/build_wrf/libraries/hdf5/bin:${PATH}
+   ```
+   or more permanently:
+   ```bash
+   echo >> ~/.bashrc
+   echo "#Add HDF5 to PATH" >> ~/.bashrc
+   echo PATH="~/build_wrf/libraries/hdf5/bin:$PATH" >> ~/.bashrc
+   ```
 
 #### CURL
 The library can be downloaded [here](https://curl.se/download.html) and the latest version at the time of writing is 8.10.1.
