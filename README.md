@@ -23,90 +23,109 @@ At a later stage, once we get familiar with the process, we will try using Intel
 
 In addition to the [WRF code](https://github.com/wrf-model/WRF), we will be needing the code for the WRF Pre-Processing System (WPS) from the official [Github page](https://github.com/wrf-model/WPS).
 
+__Note__: To redirect stdout and stderr to a log file when running a command and want to put it to the background:
+```bash
+command > log_file 2>&1 &
+```
+
 ## Build Steps
 1. Let's start by updating our system:
-```bash
-sudo apt update && sudo apt dist-upgrade -y
-```
+   ```bash
+   sudo apt update && sudo apt dist-upgrade -y
+   ```
+
 2. Proceed with installing the base system for building:
-```bash
-sudo apt install build-essentials csh m4 cmake gcc gfortran libjpeg-dev
-```
+   ```bash
+   sudo apt install build-essentials csh m4 cmake gcc gfortran libjpeg-dev
+   ```
+
 3. To keep things tidy, let's create a folder to build the required libraries:
-```bash
-mkdir -p ~/build_WRF/libraries
-```
+   ```bash
+   mkdir -p ~/build_WRF/libraries
+   ```
 
 ### MPICH
 Time to build MPICH. There is an excellent [guide](https://www.southampton.ac.uk/~sjc/raspberrypi/pi_supercomputer_southampton.htm) from Prof Simon Cox, but it has a wider scope.
 In summary, we need to perform the following steps using the latest version at this time (mpich 4.2.3):
 1. Firstly, create some folders:
-```bash
-mkdir -p ~/software/mpich3
-cd ~/software/mpich3
-```
+   ```bash
+   mkdir -p ~/software/mpich3
+   cd ~/software/mpich3
+   ```
+
 2. Then, download the source code from [here](https://www.mpich.org/downloads/):
-```bash
-wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
-```
+   ```bash
+   wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
+   ```
+
 3. Decompress the tarball:
-```bash
-tar xfz mpich-4.2.3.tar.gz
-```
+   ```bash
+   tar xfz mpich-4.2.3.tar.gz
+   ```
+
 4. ...and create a build directory:
-```
-mkdir mpich_build
-cd mpich_build
-```
+   ```
+   mkdir mpich_build
+   cd mpich_build
+   ```
+
 5. Run the following to configure the package (ready for build) and define the installation folder:
-```bash
-../mpich-4.2.3/configure --prefix=/home/<user>/build_WRF/libraries/mpich3-install
-```
+   ```bash
+   ../mpich-4.2.3/configure --prefix=/home/<user>/build_WRF/libraries/mpich3-install
+   ```
+
 6. Ready to build MPICH, so go ahead and run:
-```bash
-make
-```
-Be prepared to wait for a few hours...
+   ```bash
+   make
+   ```
+   Be prepared to wait for a few hours...
+
 7. Finally, install the package:
-```bash
-make install
-```
+   ```bash
+   make install
+   ```
+
 8. At this point MPCIH should be installed, so let's add it to our $PATH:
-```bash
-export PATH=$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin
-```
+   ```bash
+   export PATH=$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin
+   ```
+
 9. To make this available to future sessions, let's add this to the user's configuration file:
-```bash
-echo >> ~/.bashrc
-echo "#Add MPI to PATH" >> ~/.bashrc
-echo PATH="$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
-```
+   ```bash
+   echo >> ~/.bashrc
+   echo "#Add MPI to PATH" >> ~/.bashrc
+   echo PATH="$PATH:/home/<user>/build_WRF/libraries/mpich3-install/bin" >> ~/.bashrc
+   ```
+
 10. To make sure that the library has been installed correctly, run the following:
-```bash
-which mpicc
-which mpiexec
-```
+   ```bash
+   which mpicc
+   which mpiexec
+   ```
+
 11. Create a directory and move into it to run some tests for MPICH:
-```bash
-mkdir -p ~/software/mpich3/mpi_testing
-cd ~/software/mpich3/mpi_testing
-```
+   ```bash
+   mkdir -p ~/software/mpich3/mpi_testing
+   cd ~/software/mpich3/mpi_testing
+   ```
+
 12. Now run the single-node test with the following:
-```bash
-mpiexec -hosts 127.0.0.1 -n 1 hostname
-```
-This should return "raspberrypi" or the hostname of your device.
+   ```bash
+   mpiexec -hosts 127.0.0.1 -n 1 hostname
+   ```
+   This should return "raspberrypi" or the hostname of your device.
+
 13. Now run another test using one of the examples provided in C (calculate pi):
-```bash
-mpiexec -hosts 127.0.0.1 -n 2 ~/software/mpich3/mpich_build/examples/cpi
-```
-The return message should look like this:
-```
-Process 0 of 2 is on raspberrypi
-Process 1 of 2 is on raspberrypi
-pi is approximately 3.1415926544231318, Error is 0.0000000008333387
-wall clock time = 0.000214
-```
+   ```bash
+   mpiexec -hosts 127.0.0.1 -n 2 ~/software/mpich3/mpich_build/examples/cpi
+   ```
+   The return message should look like this:
+   ```bash
+   Process 0 of 2 is on raspberrypi
+   Process 1 of 2 is on raspberrypi
+   pi is approximately 3.1415926544231318, Error is 0.0000000008333387
+   wall clock time = 0.000214
+   ```
 
 ### NetCDF
 NetCDF can be downloaded from [unidata](https://downloads.unidata.ucar.edu/netcdf/) and there is some useful documentation [here](https://docs.unidata.ucar.edu/nug/current/getting_and_building_netcdf.html). 
