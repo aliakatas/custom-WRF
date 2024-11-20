@@ -2,7 +2,7 @@
 
 # # Install requirements
 # sudo apt update && sudo apt full-upgrade -y
-# sudo apt install -y build-essential csh m4 cmake gcc gfortran libjpeg-dev
+# sudo apt install -y build-essential csh m4 cmake gcc gfortran libjpeg-dev libssl-dev libpsl-dev
 
 # Set variables
 WRF_ROOT=~/build_wrf
@@ -20,6 +20,14 @@ ZLIB_BIN=${ZLIB_INSTALL_DIR}/bin
 H5_ROOT=${WRF_DEPS_BUILD_DIR}/hdf5
 H5_INSTALL_DIR=${WRF_LIBS}/hdf5
 H5_BIN=${ZLIB_INSTALL_DIR}/bin
+
+CURL_ROOT=${WRF_DEPS_BUILD_DIR}/curl
+CURL_INSTALL_DIR=${WRF_LIBS}/curl
+CURL_BIN=${CURL_INSTALL_DIR}/bin
+
+NC_ROOT=${WRF_DEPS_BUILD_DIR}/netcdf
+NC_INSTALL_DIR=${WRF_LIBS}/netcdf
+NC_BIN=${NC_INSTALL_DIR}/bin
 
 # ********************************************
 echo "WRF Root is: " ${WRF_ROOT}
@@ -98,17 +106,58 @@ mpiexec -hosts 127.0.0.1 -n 2 ${MPICH_ROOT}/mpich_build/examples/cpi
 # Add ZLIB to the PATH
 PATH=${ZLIB_BIN}:${PATH}
 
-# Prepping for netCDF - moving on to HDF5
-cd ${WRF_DEPS_BUILD_DIR}
+# # Prepping for netCDF - moving on to HDF5
+# cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${H5_ROOT}
-cd ${H5_ROOT}
-wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
-tar xfz hdf5_1.14.5.tar.gz
-mkdir hdf5_build && cd hdf5_build
-../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl
-make check
-make install
+# create_directory ${H5_ROOT}
+# cd ${H5_ROOT}
+# wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
+# tar xfz hdf5_1.14.5.tar.gz
+# mkdir hdf5_build && cd hdf5_build
+# ../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl
+# make check
+# make install
 
 # Add HDF5 to the PATH
 PATH=${H5_BIN}:${PATH}
+
+# # Prepping for netCDF - moving on to CURL
+# cd ${WRF_DEPS_BUILD_DIR}
+
+# create_directory ${CURL_ROOT}
+# cd ${CURL_ROOT}
+# wget https://curl.se/download/curl-8.10.1.tar.gz
+# tar xfz curl-8.10.1.tar.gz
+# mkdir curl_build && cd curl_build
+# ../curl-8.10.1/configure --prefix=${CURL_INSTALL_DIR} --with-openssl
+# make 
+# make install
+
+# Add CURL to the PATH - maybe not really necessary?
+# PATH=${CURL_INSTALL_DIR}/lib:${PATH}
+
+# Time for netCDF
+cd ${WRF_DEPS_BUILD_DIR}
+
+create_directory ${NC_ROOT}
+cd ${NC_ROOT}
+# do the C first!
+wget https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz
+tar xzf netcdf-c-4.9.2.tar.gz
+mkdir netcdf-c-build && cd netcdf-c-build
+CPPFLAGS="-I${H5_INSTALL_DIR}/include -I${ZLIB_INSTALL_DIR}/include -I${CURL_INSTALL_DIR}/include" LDFLAGS="-L${H5_INSTALL_DIR}/lib -L${ZLIB_INSTALL_DIR}/lib -L${CURL_INSTALL_DIR}/lib" ../netcdf-c-4.9.2/configure --prefix=${NC_INSTALL_DIR} --disable-libxml2
+make check
+make install
+
+# Add netCDF to the PATH
+PATH=${NC_BIN}:${PATH}
+
+# Now do the Fortran
+wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
+tar xzf netcdf-fortran-4.6.1.tar.gz
+mkdir netcdf-f-build && cd netcdf-f-build
+CPPFLAGS="-I${NC_INSTALL_DIR}/include" LDFLAGS="-L${NC_INSTALL_DIR}/lib" ../netcdf-fortran-4.6.1/configure --prefix=${NC_INSTALL_DIR}
+make check
+make install
+
+
