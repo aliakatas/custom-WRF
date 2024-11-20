@@ -219,83 +219,92 @@ Alternatively, head to [HDF5-Github](https://github.com/HDFGroup/hdf5) and clone
 #### CURL
 The library can be downloaded [here](https://curl.se/download.html) and the latest version at the time of writing is 8.10.1.
 1. Create some folders:
-```bash
-mkdir -p ~/software/curl
-cd ~/software/curl
-```
+   ```bash
+   mkdir -p ~/wrf_deps_builds/curl && cd ~/wrf_deps_builds/curl
+   ```
+
 2. Then, download the source code:
-```bash
-wget https://curl.se/download/curl-8.10.1.tar.gz
-```
+   ```bash
+   wget https://curl.se/download/curl-8.10.1.tar.gz
+   ```
+
 3. Decompress the tarball:
-```bash
-tar xfz curl-8.10.1.tar.gz
-```
+   ```bash
+   tar xfz curl-8.10.1.tar.gz
+   ```
+
 4. ...and create a build directory:
-```
-mkdir curl_build
-cd curl_build
-```
+   ```
+   mkdir curl_build
+   cd curl_build
+   ```
 5. Run the following to configure the package (ready for build) and define the installation folder:
-```bash
-CURLDIR=/home/<user>/build_WRF/libraries/curl-install
-../curl-8.10.1/configure --prefix=${CURLDIR} --with-openssl
-```
+   ```bash
+   CURLDIR=/home/<user>/build_WRF/libraries/curl-install
+   ../curl-8.10.1/configure --prefix=${CURLDIR} --with-openssl
+   ```
+
 6. There might be some errors related to not finding the openssl library. If not, skip to the next step.
 To rectify this, install the dev packages:
-```bash
-sudo apt install libssl-dev libpsl-dev
-```
-and re-run step 5.
+   ```bash
+   sudo apt install libssl-dev libpsl-dev
+   ```
+   and re-run step 5.
 
 7. Ready to build and install CURL, so go ahead and run:
-```bash
-make   
-make install
-```
+   ```bash
+   make   
+   make install
+   ```
 
 ---------
 
 Having all of the above in order, we can start the build process for netCDF.
 
 1. Let's start by creating some folders for tidiness:
-```bash
-mkdir -p ~/software/netcdf
-cd ~/software/netcdf
-```
+   ```bash
+   mkdir -p ~/wrf_deps_builds/netcdf && cd ~/wrf_deps_builds/netcdf
+   ```
+
 2. Proceed with downloading the source code archive:
-```bash
-wget https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz
-wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
-```
+   ```bash
+   wget https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz
+   wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
+   ```
+
 3. Decompresss the tarballs:
-```bash
-tar xzf netcdf-c-4.9.2.tar.gz
-tar xzf netcdf-fortran-4.6.1.tar.gz
-```
+   ```bash
+   tar xzf netcdf-c-4.9.2.tar.gz
+   tar xzf netcdf-fortran-4.6.1.tar.gz
+   ```
+
 4. ... and move to the netcdf-c directory first:
-```bash
-cd netcdf-c-4.9.2
-```
+   ```bash
+   cd netcdf-c-4.9.2
+   ```
+
 5. Create the build directories needed:
-```bash
-mkdir netcdf-c-build
-mkdir netcdf-f-build
-```
+   ```bash
+   mkdir netcdf-c-build
+   mkdir netcdf-f-build
+   ```
+
 6. Enter the "c-build" directory:
-```bash
-cd netcdf-c-build
-```
+   ```bash
+   cd netcdf-c-build
+   ```
+
 7. Configure the build system. Disabling xml2 will force using the netCDF internal version of the library.
-```bash
-NCDIR=/home/<user>/build_WRF/libraries/netcdf-install
-CPPFLAGS="-I${H5DIR}/include -I${ZDIR}/include -I${CURLDIR}/include" LDFLAGS="-L${H5DIR}/lib -L${ZDIR}/lib -L${CURLDIR}/lib" ../configure --prefix=${NCDIR} --disable-libxml2
-```
+   ```bash
+   NCDIR=/home/<user>/build_WRF/libraries/netcdf-install
+   CPPFLAGS="-I${H5DIR}/include -I${ZDIR}/include -I${CURLDIR}/include" LDFLAGS="-L${H5DIR}/lib -L${ZDIR}/lib -L${CURLDIR}/lib" ../configure --prefix=${NCDIR} --disable-libxml2
+   ```
+
 8. Ready to build and install netCDF-C, so go ahead and run:
-```bash
-make check
-make install
-```
+   ```bash
+   make check
+   make install
+   ```
 
 On exit, it gives a very useful message about how to use netcdf with your projects:
 ```bash
