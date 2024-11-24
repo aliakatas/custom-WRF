@@ -29,6 +29,14 @@ NC_ROOT=${WRF_DEPS_BUILD_DIR}/netcdf
 NC_INSTALL_DIR=${WRF_LIBS}/netcdf
 NC_BIN=${NC_INSTALL_DIR}/bin
 
+PNG_ROOT=${WRF_DEPS_BUILD_DIR}/libpng
+PNG_INSTALL_DIR=${WRF_LIBS}/grib2
+PNG_BIN=${PNG_INSTALL_DIR}/bin
+
+JASPER_ROOT=${WRF_DEPS_BUILD_DIR}/jasper
+JASPER_INSTALL_DIR=${WRF_LIBS}/grib2
+JASPER_BIN=${JASPER_INSTALL_DIR}/bin
+
 # ********************************************
 echo "WRF Root is: " ${WRF_ROOT}
 echo "WRF libraries are located in: " ${WRF_LIBS}
@@ -160,4 +168,41 @@ CPPFLAGS="-I${NC_INSTALL_DIR}/include" LDFLAGS="-L${NC_INSTALL_DIR}/lib" ../netc
 make check
 make install
 
+# netCDF is already in the PATH
 
+# Let's do libpng
+cd ${WRF_DEPS_BUILD_DIR}
+
+create_directory ${PNG_ROOT}
+cd ${PNG_ROOT}
+wget https://download.sourceforge.net/libpng/libpng-1.6.44.tar.gz
+tar xzf libpng-1.6.44.tar.gz
+mkdir libpng-buil && cd libpng-build
+../libpng-1.6.44/configure --prefix=${PNG_INSTALL_DIR}
+make
+make install
+
+# Add libpng to the PATH
+PATH=${PNG_BIN}:${PATH}
+
+# Finally, do JASPER
+cd ${WRF_DEPS_BUILD_DIR}
+
+create_directory ${JASPER_ROOT}
+git clone git@github.com:jasper-software/jasper.git
+mkdir jasper-build && cd jasper-build
+cmake ../jasper -DJAS_ENABLE_SHARED=true -DCMAKE_INSTALL_PREFIX=${JASPER_INSTALL_DIR} -DALLOW_IN_SOURCE_BUILD=on
+cmake --build .
+make clean all
+make test
+make install
+export JASPERINC=${JASPER_INSTALL_DIR}/include
+export JASPERLIB=${JASPER_INSTALL_DIR}/lib
+
+# Are we really ready to go now?
+cd ${WRF_ROOT}
+
+git clone git@github.com:wrf-model/WRF.git
+cd WRF
+export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+./configure
