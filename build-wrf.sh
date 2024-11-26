@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# # Install requirements
-# sudo apt update && sudo apt full-upgrade -y
-# sudo apt install -y build-essential csh m4 cmake gcc gfortran libjpeg-dev libssl-dev libpsl-dev
+# Install requirements
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install -y build-essential csh m4 cmake gcc gfortran libjpeg-dev libssl-dev libpsl-dev
 
 # Set variables
 WRF_ROOT=~/build_wrf
@@ -70,23 +70,23 @@ create_directory() {
     fi
 }
 
-# # Create directories
-# create_directory ${WRF_ROOT}
-# create_directory ${WRF_LIBS}
-# create_directory ${WRF_DEPS_BUILD_DIR}
+# Create directories
+create_directory ${WRF_ROOT}
+create_directory ${WRF_LIBS}
+create_directory ${WRF_DEPS_BUILD_DIR}
 
-# # Change dir to start building dependencies
-# cd ${WRF_DEPS_BUILD_DIR}
+# Change dir to start building dependencies
+cd ${WRF_DEPS_BUILD_DIR}
 
-# # MPICH
-# create_directory ${MPICH_ROOT}
-# cd ${MPICH_ROOT}
-# wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
-# tar xfz mpich-4.2.3.tar.gz
-# mkdir mpich_build && cd mpich_build
-# ../mpich-4.2.3/configure --prefix=${MPICH_INSTALL_DIR}
-# make 
-# make install
+# MPICH
+create_directory ${MPICH_ROOT}
+cd ${MPICH_ROOT}
+wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
+tar xfz mpich-4.2.3.tar.gz
+mkdir mpich_build && cd mpich_build
+../mpich-4.2.3/configure --prefix=${MPICH_INSTALL_DIR}
+make 
+make install
 
 # Add MPICH to the PATH
 PATH=${MPICH_BIN}:${PATH}
@@ -95,54 +95,54 @@ PATH=${MPICH_BIN}:${PATH}
 echo "which mpicc says: " `which mpicc`
 echo "which mpicc says: " `which mpiexec`
 
-# # Run a couple of quick tests to verify it is working
-# mkdir ${MPICH_ROOT}/mpi_testing && cd ${MPICH_ROOT}/mpi_testing
-# mpiexec -hosts 127.0.0.1 -n 1 hostname
+# Run a couple of quick tests to verify it is working
+mkdir ${MPICH_ROOT}/mpi_testing && cd ${MPICH_ROOT}/mpi_testing
+mpiexec -hosts 127.0.0.1 -n 1 hostname
 mpiexec -hosts 127.0.0.1 -n 2 ${MPICH_ROOT}/mpich_build/examples/cpi
 
-# # Prepping for netCDF - with ZLIB
-# cd ${WRF_DEPS_BUILD_DIR}
+# Prepping for netCDF - with ZLIB
+cd ${WRF_DEPS_BUILD_DIR}
 
-# create_directory ${ZLIB_ROOT}
-# cd ${ZLIB_ROOT}
-# wget https://www.zlib.net/zlib-1.3.1.tar.gz
-# tar xfz zlib-1.3.1.tar.gz
-# mkdir zlib_build && cd zlib_build
-# ../zlib-1.3.1/configure --prefix=${ZLIB_INSTALL_DIR}
-# make install
+create_directory ${ZLIB_ROOT}
+cd ${ZLIB_ROOT}
+wget https://www.zlib.net/zlib-1.3.1.tar.gz
+tar xfz zlib-1.3.1.tar.gz
+mkdir zlib_build && cd zlib_build
+../zlib-1.3.1/configure --prefix=${ZLIB_INSTALL_DIR}
+make install
 
 # Add ZLIB to the PATH
 PATH=${ZLIB_BIN}:${PATH}
 
-# # Prepping for netCDF - moving on to HDF5
-# cd ${WRF_DEPS_BUILD_DIR}
+# Prepping for netCDF - moving on to HDF5
+cd ${WRF_DEPS_BUILD_DIR}
 
-# create_directory ${H5_ROOT}
-# cd ${H5_ROOT}
-# wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
-# tar xfz hdf5_1.14.5.tar.gz
-# mkdir hdf5_build && cd hdf5_build
-# ../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl
-# make check
-# make install
+create_directory ${H5_ROOT}
+cd ${H5_ROOT}
+wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
+tar xfz hdf5_1.14.5.tar.gz
+mkdir hdf5_build && cd hdf5_build
+../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl
+make check
+make install
 
 # Add HDF5 to the PATH
 PATH=${H5_BIN}:${PATH}
 
-# # Prepping for netCDF - moving on to CURL
-# cd ${WRF_DEPS_BUILD_DIR}
+# Prepping for netCDF - moving on to CURL
+cd ${WRF_DEPS_BUILD_DIR}
 
-# create_directory ${CURL_ROOT}
-# cd ${CURL_ROOT}
-# wget https://curl.se/download/curl-8.10.1.tar.gz
-# tar xfz curl-8.10.1.tar.gz
-# mkdir curl_build && cd curl_build
-# ../curl-8.10.1/configure --prefix=${CURL_INSTALL_DIR} --with-openssl
-# make 
-# make install
+create_directory ${CURL_ROOT}
+cd ${CURL_ROOT}
+wget https://curl.se/download/curl-8.10.1.tar.gz
+tar xfz curl-8.10.1.tar.gz
+mkdir curl_build && cd curl_build
+../curl-8.10.1/configure --prefix=${CURL_INSTALL_DIR} --with-openssl
+make 
+make install
 
-# Add CURL to the PATH - maybe not really necessary?
-# PATH=${CURL_INSTALL_DIR}/lib:${PATH}
+Add CURL to the PATH - maybe not really necessary?
+PATH=${CURL_INSTALL_DIR}/lib:${PATH}
 
 # Time for netCDF
 cd ${WRF_DEPS_BUILD_DIR}
@@ -196,8 +196,8 @@ cmake --build .
 make clean all
 make test
 make install
-export JASPERINC=${JASPER_INSTALL_DIR}/include
-export JASPERLIB=${JASPER_INSTALL_DIR}/lib
+JASPERINC=${JASPER_INSTALL_DIR}/include
+JASPERLIB=${JASPER_INSTALL_DIR}/lib
 
 # Are we really ready to go now?
 cd ${WRF_ROOT}
@@ -206,3 +206,16 @@ git clone git@github.com:wrf-model/WRF.git
 cd WRF
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 ./configure
+./compile em_real >& log.compile
+
+# Presumably, WRF is done and dusted.
+# Move on to WPS
+cd ${WRF_ROOT}
+
+wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
+tar xzf v4.6.0
+mv v4.6.0 WPS-v4.6.0
+cd WPS-v4.6.0
+
+# at this point, more interaction is advised (?)
+# see https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compilation_tutorial.php#STEP4
