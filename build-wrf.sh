@@ -1,13 +1,30 @@
 #!/bin/bash
 
-# Install requirements
-sudo apt update && sudo apt full-upgrade -y
-sudo apt install -y build-essential csh m4 cmake gcc gfortran libjpeg-dev libssl-dev libpsl-dev
-
 # Set variables
 WRF_ROOT=~/build_wrf
 WRF_LIBS=${WRF_ROOT}/libraries
 WRF_DEPS_BUILD_DIR=~/wrf_deps_builds
+
+# Check if an argument was passed
+if [ $# -ne 0 ]; then
+    
+    case "$1" in
+        "clean")
+            echo "Running clean workflow"
+            rm -rf ${WRF_ROOT}
+            rm -rf ${WRF_DEPS_BUILD_DIR}
+            exit 0
+            ;;
+        *)
+            echo "Error: Invalid argument. Supported arguments are: clean"
+            exit 1
+            ;;
+    esac
+fi
+
+# Install requirements
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install -y build-essential csh m4 cmake gcc gfortran libjpeg-dev libssl-dev libpsl-dev
 
 MPICH_ROOT=${WRF_DEPS_BUILD_DIR}/mpich3
 MPICH_INSTALL_DIR=${WRF_LIBS}/mpich3
