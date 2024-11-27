@@ -127,7 +127,8 @@ cd ${H5_ROOT}
 wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
 tar xfz hdf5_1.14.5.tar.gz
 mkdir hdf5_build && cd hdf5_build
-../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl
+# don't forget Fortran: https://forum.mmm.ucar.edu/threads/error-cannot-find-lhdf5_hl_fortran-and-lhdf5_fortran.16060/
+../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl --enable-fortran
 make check
 make install
 
