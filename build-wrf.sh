@@ -19,6 +19,7 @@ ZLIB_BIN=${ZLIB_INSTALL_DIR}/bin
 
 H5_ROOT=${WRF_DEPS_BUILD_DIR}/hdf5
 H5_INSTALL_DIR=${WRF_LIBS}/hdf5
+export HDF5=${H5_INSTALL_DIR}
 H5_BIN=${ZLIB_INSTALL_DIR}/bin
 
 CURL_ROOT=${WRF_DEPS_BUILD_DIR}/curl
@@ -27,6 +28,7 @@ CURL_BIN=${CURL_INSTALL_DIR}/bin
 
 NC_ROOT=${WRF_DEPS_BUILD_DIR}/netcdf
 NC_INSTALL_DIR=${WRF_LIBS}/netcdf
+export NETCDF=${NC_INSTALL_DIR}
 NC_BIN=${NC_INSTALL_DIR}/bin
 
 PNG_ROOT=${WRF_DEPS_BUILD_DIR}/libpng
@@ -36,6 +38,9 @@ PNG_BIN=${PNG_INSTALL_DIR}/bin
 JASPER_ROOT=${WRF_DEPS_BUILD_DIR}/jasper
 JASPER_INSTALL_DIR=${WRF_LIBS}/grib2
 JASPER_BIN=${JASPER_INSTALL_DIR}/bin
+
+export JASPERINC=${JASPER_INSTALL_DIR}/include
+export JASPERLIB=${JASPER_INSTALL_DIR}/lib
 
 # ********************************************
 echo "WRF Root is: " ${WRF_ROOT}
@@ -89,7 +94,7 @@ make
 make install
 
 # Add MPICH to the PATH
-PATH=${MPICH_BIN}:${PATH}
+export PATH=${MPICH_BIN}:${PATH}
 
 # Review where the binaries are read from
 echo "which mpicc says: " `which mpicc`
@@ -112,7 +117,7 @@ mkdir zlib_build && cd zlib_build
 make install
 
 # Add ZLIB to the PATH
-PATH=${ZLIB_BIN}:${PATH}
+export PATH=${ZLIB_BIN}:${PATH}
 
 # Prepping for netCDF - moving on to HDF5
 cd ${WRF_DEPS_BUILD_DIR}
@@ -127,7 +132,7 @@ make check
 make install
 
 # Add HDF5 to the PATH
-PATH=${H5_BIN}:${PATH}
+export PATH=${H5_BIN}:${PATH}
 
 # Prepping for netCDF - moving on to CURL
 cd ${WRF_DEPS_BUILD_DIR}
@@ -141,8 +146,8 @@ mkdir curl_build && cd curl_build
 make 
 make install
 
-Add CURL to the PATH - maybe not really necessary?
-PATH=${CURL_INSTALL_DIR}/lib:${PATH}
+# Add CURL to the PATH - maybe not really necessary?
+export PATH=${CURL_INSTALL_DIR}/lib:${PATH}
 
 # Time for netCDF
 cd ${WRF_DEPS_BUILD_DIR}
@@ -158,7 +163,7 @@ make check
 make install
 
 # Add netCDF to the PATH
-PATH=${NC_BIN}:${PATH}
+export PATH=${NC_BIN}:${PATH}
 
 # Now do the Fortran
 wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
@@ -183,7 +188,7 @@ make
 make install
 
 # Add libpng to the PATH
-PATH=${PNG_BIN}:${PATH}
+export PATH=${PNG_BIN}:${PATH}
 
 # Finally, do JASPER
 cd ${WRF_DEPS_BUILD_DIR}
@@ -196,26 +201,27 @@ cmake --build .
 make clean all
 make test
 make install
-JASPERINC=${JASPER_INSTALL_DIR}/include
-JASPERLIB=${JASPER_INSTALL_DIR}/lib
 
 # Are we really ready to go now?
 cd ${WRF_ROOT}
 
-git clone git@github.com:wrf-model/WRF.git
+# git clone git@github.com:wrf-model/WRF.git
 cd WRF
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
-./configure
-./compile em_real >& log.compile
 
-# Presumably, WRF is done and dusted.
-# Move on to WPS
-cd ${WRF_ROOT}
+# # From this point onward, it's best
+# # to run interactively?
+# ./configure
+# ./compile em_real >& log.compile &
 
-wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
-tar xzf v4.6.0
-mv v4.6.0 WPS-v4.6.0
-cd WPS-v4.6.0
+# # Presumably, WRF is done and dusted.
+# # Move on to WPS
+# cd ${WRF_ROOT}
+
+# wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
+# tar xzf v4.6.0.tar.gz
+# cd WPS-4.6.0
+# ./configure
 
 # at this point, more interaction is advised (?)
 # see https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compilation_tutorial.php#STEP4
