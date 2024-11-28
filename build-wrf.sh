@@ -223,13 +223,14 @@ make install
 # Are we really ready to go now?
 cd ${WRF_ROOT}
 
-# git clone git@github.com:wrf-model/WRF.git
+git clone git@github.com:wrf-model/WRF.git
 cd WRF
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 
 # # From this point onward, it's best
 # # to run interactively?
 # ./configure
+# selected (serial) for GCC AArch64 + no nesting
 # ./compile em_real >& log.compile &
 
 # # Presumably, WRF is done and dusted.
