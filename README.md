@@ -467,3 +467,10 @@ Please select from among the following supported platforms.
 Enter selection [1-0] : 
 ```
 
+To fix this, follow the change proposed [here](https://github.com/wrf-model/WPS/pull/262)
+
+Run `./configure` and select `1.  Linux x86_64 aarch64, gfortran    (serial)`.
+There is an issue raised that NETCDF + FORTRAN test did not run successfully.
+But ignoring for now and running `./compile`.
+No luck... See [ucar forum](https://forum.mmm.ucar.edu/threads/resolved-wps-pgi-usr-lib64-mpich-3-2-lib-file-not-recognized-is-a-directory.47/) for potential solution.
+
