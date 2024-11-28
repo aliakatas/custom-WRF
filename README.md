@@ -438,4 +438,32 @@ Could it all this be in vain?
 It looks like the instructions here: https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compilation_tutorial.php are similar but somehow clearer?
 Will attempt later!
 
+For budgeting time, on the RPi 4 (4GB):
+- Libraries take roughly 5 hours to build 
+- WRF takes roughly 2 hours & 15 minutes to build, plus 10 minutes to run post-build tasks
+- WPS takes roughly XXX to build
+
+
+### Issues
+On configuring WPS, I get the following:
+```bash
+(base) aristotelis@raspberrypi:~/build_wrf/WPS-4.6.0 $ ./configure
+Will use NETCDF in dir: /home/aristotelis/build_wrf/libraries/netcdf
+Found what looks like a valid WRF I/O library in ../WRF
+Found Jasper environment variables for GRIB2 support...
+  $JASPERLIB = /home/aristotelis/build_wrf/libraries/grib2/lib
+  $JASPERINC = /home/aristotelis/build_wrf/libraries/grib2/include
+------------------------------------------------------------------------
+Please select from among the following supported platforms.
+
+
+Enter selection [1-0] : 1
+
+Invalid response (1)
+------------------------------------------------------------------------
+Please select from among the following supported platforms.
+
+
+Enter selection [1-0] : 
+```
 
