@@ -200,7 +200,7 @@ create_directory ${PNG_ROOT}
 cd ${PNG_ROOT}
 wget https://download.sourceforge.net/libpng/libpng-1.6.44.tar.gz
 tar xzf libpng-1.6.44.tar.gz
-mkdir libpng-buil && cd libpng-build
+mkdir libpng-build && cd libpng-build
 ../libpng-1.6.44/configure --prefix=${PNG_INSTALL_DIR}
 make
 make install
