@@ -105,7 +105,7 @@ create_directory ${MPICH_ROOT}
 cd ${MPICH_ROOT}
 wget https://www.mpich.org/static/downloads/4.2.3/mpich-4.2.3.tar.gz
 tar xfz mpich-4.2.3.tar.gz
-mkdir mpich_build && cd mpich_build
+create_directory mpich_build && cd mpich_build
 ../mpich-4.2.3/configure --prefix=${MPICH_INSTALL_DIR}
 make 
 make install
@@ -125,25 +125,23 @@ mpiexec -hosts 127.0.0.1 -n 2 ${MPICH_ROOT}/mpich_build/examples/cpi
 # Prepping for netCDF - with ZLIB
 cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${ZLIB_ROOT}
-cd ${ZLIB_ROOT}
+create_directory ${ZLIB_ROOT} && cd ${ZLIB_ROOT}
 wget https://www.zlib.net/zlib-1.3.1.tar.gz
 tar xfz zlib-1.3.1.tar.gz
-mkdir zlib_build && cd zlib_build
+create_directory zlib_build && cd zlib_build
 ../zlib-1.3.1/configure --prefix=${ZLIB_INSTALL_DIR}
 make install
 
 # Add ZLIB to the PATH
-export PATH=${ZLIB_BIN}:${PATH}
+# export PATH=${ZLIB_BIN}:${PATH}
 
 # Prepping for netCDF - moving on to HDF5
 cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${H5_ROOT}
-cd ${H5_ROOT}
+create_directory ${H5_ROOT} && cd ${H5_ROOT}
 wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.5.tar.gz
 tar xfz hdf5_1.14.5.tar.gz
-mkdir hdf5_build && cd hdf5_build
+create_directory hdf5_build && cd hdf5_build
 # don't forget Fortran: https://forum.mmm.ucar.edu/threads/error-cannot-find-lhdf5_hl_fortran-and-lhdf5_fortran.16060/
 ../hdf5-hdf5_1.14.5/configure --with-zlib=${ZLIB_INSTALL_DIR} --prefix=${H5_INSTALL_DIR} --enable-hl --enable-fortran --enable-shared
 make check
@@ -155,11 +153,10 @@ export PATH=${H5_BIN}:${PATH}
 # Prepping for netCDF - moving on to CURL
 cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${CURL_ROOT}
-cd ${CURL_ROOT}
+create_directory ${CURL_ROOT} && cd ${CURL_ROOT}
 wget https://curl.se/download/curl-8.10.1.tar.gz
 tar xfz curl-8.10.1.tar.gz
-mkdir curl_build && cd curl_build
+create_directory curl_build && cd curl_build
 ../curl-8.10.1/configure --prefix=${CURL_INSTALL_DIR} --with-openssl
 make 
 make install
@@ -170,12 +167,11 @@ make install
 # Time for netCDF
 cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${NC_ROOT}
-cd ${NC_ROOT}
+create_directory ${NC_ROOT} && cd ${NC_ROOT}
 # do the C first!
 wget https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz
 tar xzf netcdf-c-4.9.2.tar.gz
-mkdir netcdf-c-build && cd netcdf-c-build
+create_directory netcdf-c-build && cd netcdf-c-build
 CPPFLAGS="-I${H5_INSTALL_DIR}/include -I${ZLIB_INSTALL_DIR}/include -I${CURL_INSTALL_DIR}/include" LDFLAGS="-L${H5_INSTALL_DIR}/lib -L${ZLIB_INSTALL_DIR}/lib -L${CURL_INSTALL_DIR}/lib" ../netcdf-c-4.9.2/configure --prefix=${NC_INSTALL_DIR} --disable-libxml2 --disable-dap --enable-netcdf4 --enable-hdf5 --enable-shared
 make -j 2
 # make check
@@ -188,7 +184,7 @@ export PATH=${NC_BIN}:${PATH}
 cd ${NC_ROOT}
 wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
 tar xzf netcdf-fortran-4.6.1.tar.gz
-mkdir netcdf-f-build && cd netcdf-f-build
+create_directory netcdf-f-build && cd netcdf-f-build
 CPPFLAGS="-I${NC_INSTALL_DIR}/include" LDFLAGS="-L${NC_INSTALL_DIR}/lib" ../netcdf-fortran-4.6.1/configure --prefix=${NC_INSTALL_DIR} --disable-hdf5 --enable-shared
 make -j 2
 # make check
@@ -199,11 +195,10 @@ make install
 # Let's do libpng
 cd ${WRF_DEPS_BUILD_DIR}
 
-create_directory ${PNG_ROOT}
-cd ${PNG_ROOT}
+create_directory ${PNG_ROOT} && cd ${PNG_ROOT}
 wget https://download.sourceforge.net/libpng/libpng-1.6.44.tar.gz
 tar xzf libpng-1.6.44.tar.gz
-mkdir png-build && cd png-build
+create_directory png-build && cd png-build
 ../libpng-1.6.44/configure --prefix=${PNG_INSTALL_DIR}
 make -j 2
 make install
@@ -216,7 +211,7 @@ cd ${WRF_DEPS_BUILD_DIR}
 
 create_directory ${JASPER_ROOT}
 git clone git@github.com:jasper-software/jasper.git
-mkdir jasper-build && cd jasper-build
+create_directory jasper-build && cd jasper-build
 cmake ../jasper -DJAS_ENABLE_SHARED=true -DCMAKE_INSTALL_PREFIX=${JASPER_INSTALL_DIR} -DALLOW_IN_SOURCE_BUILD=on
 cmake --build .
 make clean all
