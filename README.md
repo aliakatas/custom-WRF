@@ -402,10 +402,13 @@ cd ${WRF_ROOT}
 git clone git@github.com:wrf-model/WRF.git
 cd WRF
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+export LD_LIBRARY_PATH=${NC_INSTALL_DIR}/lib:${JASPER_INSTALL_DIR}/lib
 ./configure
 ```
 At this point, you will be asked to select some options. 
-For the build, I selected (serial) for GCC AArch64, and no nesting.
+For the build, initially, I selected (serial) for GCC AArch64, and no nesting.
+Apparently, this might lead to issues with the WPS build later.
+Maybe, smpar and/or dmpar would do the trick. Off to the test!
 Follow up with:
 ```bash
 ./compile em_real >& log.compile &
@@ -415,10 +418,9 @@ Follow up with:
 Once WRF is done, we can proceed with WPS:
 ```bash
 cd ${WRF_ROOT}
-
-wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
-tar xzf v4.6.0.tar.gz
-cd WPS-4.6.0
+export WRF_DIR=${WRF_ROOT}/WRF
+git clone https://github.com/wrf-model/WPS.git
+cd WPS
 ./configure
 ```
 
@@ -432,6 +434,8 @@ To redirect stdout and stderr to a log file when running a command and want to p
 ```bash
 command > log_file 2>&1 &
 ```
+
+To be able to debug issues easily, it might be a good idea to keep separate build logs for each library being built, as well as WRF and WPS.
 
 ### Issues
 On configuring WPS, I get the following:
@@ -455,10 +459,16 @@ Please select from among the following supported platforms.
 Enter selection [1-0] : 
 ```
 
-To fix this, follow the change proposed [here](https://github.com/wrf-model/WPS/pull/262)
+To fix this, follow the change proposed [here](https://github.com/wrf-model/WPS/pull/262).
+Basically, change the follownig line in the file "WPS/arch/configure.defaults":
+```#ARCH    Linux x86_64, gfortran   # serial serial_NO_GRIB2 dmpar dmpar_NO_GRIB2```
+with
+```#ARCH    Linux x86_64 aarch64, gfortran   # serial serial_NO_GRIB2 dmpar dmpar_NO_GRIB2```
+
 
 Run `./configure` and select `1.  Linux x86_64 aarch64, gfortran    (serial)` or whatever matches the WRF option best.
 If some errors still pop up or if the process does not produce the expected binaries, [this](https://forum.mmm.ucar.edu/threads/resolved-wps-pgi-usr-lib64-mpich-3-2-lib-file-not-recognized-is-a-directory.47/) is another avenue to explore.
 
 Do not ignore [official guidance](https://forum.mmm.ucar.edu/threads/full-wrf-and-wps-installation-example-gnu.12385/)! 
+This seems helpful as well: [UCAR forum](https://forum.mmm.ucar.edu/threads/full-wrf-and-wps-installation-example-gnu.12385/)
 
