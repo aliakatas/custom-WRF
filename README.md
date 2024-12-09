@@ -460,3 +460,5 @@ To fix this, follow the change proposed [here](https://github.com/wrf-model/WPS/
 Run `./configure` and select `1.  Linux x86_64 aarch64, gfortran    (serial)` or whatever matches the WRF option best.
 If some errors still pop up or if the process does not produce the expected binaries, [this](https://forum.mmm.ucar.edu/threads/resolved-wps-pgi-usr-lib64-mpich-3-2-lib-file-not-recognized-is-a-directory.47/) is another avenue to explore.
 
+Do not ignore [official guidance](https://forum.mmm.ucar.edu/threads/full-wrf-and-wps-installation-example-gnu.12385/)! 
+
