@@ -165,7 +165,7 @@ make
 make install
 
 # Add CURL to the PATH - maybe not really necessary?
-export PATH=${CURL_INSTALL_DIR}/lib:${PATH}
+# export PATH=${CURL_INSTALL_DIR}/lib:${PATH}
 
 # Time for netCDF
 cd ${WRF_DEPS_BUILD_DIR}
@@ -176,19 +176,22 @@ cd ${NC_ROOT}
 wget https://downloads.unidata.ucar.edu/netcdf-c/4.9.2/netcdf-c-4.9.2.tar.gz
 tar xzf netcdf-c-4.9.2.tar.gz
 mkdir netcdf-c-build && cd netcdf-c-build
-CPPFLAGS="-I${H5_INSTALL_DIR}/include -I${ZLIB_INSTALL_DIR}/include -I${CURL_INSTALL_DIR}/include" LDFLAGS="-L${H5_INSTALL_DIR}/lib -L${ZLIB_INSTALL_DIR}/lib -L${CURL_INSTALL_DIR}/lib" ../netcdf-c-4.9.2/configure --prefix=${NC_INSTALL_DIR} --disable-libxml2
-make check
+CPPFLAGS="-I${H5_INSTALL_DIR}/include -I${ZLIB_INSTALL_DIR}/include -I${CURL_INSTALL_DIR}/include" LDFLAGS="-L${H5_INSTALL_DIR}/lib -L${ZLIB_INSTALL_DIR}/lib -L${CURL_INSTALL_DIR}/lib" ../netcdf-c-4.9.2/configure --prefix=${NC_INSTALL_DIR} --disable-libxml2 --disable-dap --enable-netcdf4 --enable-hdf5 --enable-shared
+make -j 2
+# make check
 make install
 
 # Add netCDF to the PATH
 export PATH=${NC_BIN}:${PATH}
 
 # Now do the Fortran
+cd ${NC_ROOT}
 wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.6.1/netcdf-fortran-4.6.1.tar.gz
 tar xzf netcdf-fortran-4.6.1.tar.gz
 mkdir netcdf-f-build && cd netcdf-f-build
-CPPFLAGS="-I${NC_INSTALL_DIR}/include" LDFLAGS="-L${NC_INSTALL_DIR}/lib" ../netcdf-fortran-4.6.1/configure --prefix=${NC_INSTALL_DIR}
-make check
+CPPFLAGS="-I${NC_INSTALL_DIR}/include" LDFLAGS="-L${NC_INSTALL_DIR}/lib" ../netcdf-fortran-4.6.1/configure --prefix=${NC_INSTALL_DIR} --disable-hdf5 --enable-shared
+make -j 2
+# make check
 make install
 
 # netCDF is already in the PATH
@@ -200,9 +203,9 @@ create_directory ${PNG_ROOT}
 cd ${PNG_ROOT}
 wget https://download.sourceforge.net/libpng/libpng-1.6.44.tar.gz
 tar xzf libpng-1.6.44.tar.gz
-mkdir libpng-build && cd libpng-build
+mkdir png-build && cd png-build
 ../libpng-1.6.44/configure --prefix=${PNG_INSTALL_DIR}
-make
+make -j 2
 make install
 
 # Add libpng to the PATH
@@ -225,6 +228,7 @@ cd ${WRF_ROOT}
 
 git clone git@github.com:wrf-model/WRF.git
 cd WRF
+export LD_LIBRARY_PATH=${NC_INSTALL_DIR}/lib:${JASPER_INSTALL_DIR}/lib
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 
 # # From this point onward, it's best
