@@ -204,7 +204,7 @@ make -j 2
 make install
 
 # Add libpng to the PATH
-export PATH=${PNG_BIN}:${PATH}
+# export PATH=${PNG_BIN}:${PATH}
 
 # Finally, do JASPER
 cd ${WRF_DEPS_BUILD_DIR}
