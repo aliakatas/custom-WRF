@@ -225,20 +225,20 @@ git clone git@github.com:wrf-model/WRF.git
 cd WRF
 export LD_LIBRARY_PATH=${NC_INSTALL_DIR}/lib:${JASPER_INSTALL_DIR}/lib
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+export WRF_DIR=${WRF_ROOT}/WRF
 
 # # From this point onward, it's best
 # # to run interactively?
 # ./configure
-# selected (serial) for GCC AArch64 + no nesting
+# selected (smpar) for GCC AArch64 + no nesting
 # ./compile em_real >& log.compile &
 
 # # Presumably, WRF is done and dusted.
 # # Move on to WPS
 # cd ${WRF_ROOT}
 
-# wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
-# tar xzf v4.6.0.tar.gz
-# cd WPS-4.6.0
+# git clone https://github.com/wrf-model/WPS.git
+# cd WPS
 # ./configure
 
 # at this point, more interaction is advised (?)
