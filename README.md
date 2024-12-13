@@ -465,10 +465,14 @@ Basically, change the follownig line in the file "WPS/arch/configure.defaults":
 with
 ```#ARCH    Linux x86_64 aarch64, gfortran   # serial serial_NO_GRIB2 dmpar dmpar_NO_GRIB2```
 
-
 Run `./configure` and select `1.  Linux x86_64 aarch64, gfortran    (serial)` or whatever matches the WRF option best.
 If some errors still pop up or if the process does not produce the expected binaries, [this](https://forum.mmm.ucar.edu/threads/resolved-wps-pgi-usr-lib64-mpich-3-2-lib-file-not-recognized-is-a-directory.47/) is another avenue to explore.
+What seems to have done the trick for me is to edit "configure.wps" after running `.\configure`. It seems to be missing the library for OpenMP from `WRF_LIB`. 
+More about this [here](https://github.com/wrf-model/WPS/issues/110#issuecomment-694933320).
 
 Do not ignore [official guidance](https://forum.mmm.ucar.edu/threads/full-wrf-and-wps-installation-example-gnu.12385/)! 
 This seems helpful as well: [UCAR forum](https://forum.mmm.ucar.edu/threads/full-wrf-and-wps-installation-example-gnu.12385/)
+
+Apparently, there is a problem with using Jasper >= 3.0 as WPS was using functions which have now been removed/replaced.
+[This issue](https://github.com/wrf-model/WPS/issues/207) provides more context and [solution](https://github.com/easybuilders/easybuild-easyconfigs/pull/21938/files#diff-d148887cb1e575c48524153439da2563aecb708279db2ccb8dbafc723d1251b8).
 
