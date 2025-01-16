@@ -3,7 +3,8 @@
 # Set variables
 WRF_ROOT=~/build_wrf
 WRF_LIBS=${WRF_ROOT}/libraries
-WRF_DEPS_BUILD_DIR=~/wrf_deps_builds
+WRF_DEPS_BUILD_DIR=${WRF_ROOT}/deps_builds
+CWD=`pwd`
 
 # Check if an argument was passed
 if [ $# -ne 0 ]; then
@@ -12,7 +13,6 @@ if [ $# -ne 0 ]; then
         "clean")
             echo "Running clean workflow"
             rm -rf ${WRF_ROOT}
-            rm -rf ${WRF_DEPS_BUILD_DIR}
             exit 0
             ;;
         *)
@@ -233,13 +233,16 @@ export WRF_DIR=${WRF_ROOT}/WRF
 # selected (smpar) for GCC AArch64 + no nesting
 # ./compile em_real >& log.compile &
 
-# # Presumably, WRF is done and dusted.
-# # Move on to WPS
-# cd ${WRF_ROOT}
+# Presumably, WRF is done and dusted.
+# Move on to WPS
+cd ${WRF_ROOT}
 
-# git clone https://github.com/wrf-model/WPS.git
+git clone https://github.com/wrf-model/WPS.git
 # cd WPS
 # ./configure
 
 # at this point, more interaction is advised (?)
 # see https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compilation_tutorial.php#STEP4
+
+# Leave everything as you found it
+cd ${CWD}
