@@ -422,6 +422,7 @@ export WRF_DIR=${WRF_ROOT}/WRF
 git clone https://github.com/wrf-model/WPS.git
 cd WPS
 ./configure
+./compile >& log.compile &
 ```
 
 ## Notes
